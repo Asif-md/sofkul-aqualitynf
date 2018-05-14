@@ -1,0 +1,41 @@
+#quotation_box {
+  background-color: #fff;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#quotation_table {
+  background-color: #fff;
+  font-size:none;
+}
+
+#company_logo {
+  margin-top: 50px;
+  margin-left: 10px;
+  width: 210px;
+  height: 180px;
+}
+
+.row-divide {
+  border-bottom: 4px solid #d2d6de;
+}
+
+#quotation_box {
+  font-weight: 550;
+}
+
+.footer {
+   
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color:none;
+    color: rgb(245, 163, 10);
+    text-align:center;
+}
+
+.footer-header{
+  color: black;
+
+}

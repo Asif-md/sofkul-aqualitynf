@@ -1,0 +1,325 @@
+<div class="content-wrapper" style="height: 2000px;margin-left: 0vw;">
+  <section class=" content-header">
+    <div class="col-xs-10 pull-right">
+      <h1>
+        Quotation Display
+      </h1>
+      <ol class="breadcrumb ">
+        <li><a [routerLink]="[ '/dashboard/home' ] "><i class="fa fa-dashboard "></i> Sofkul</a></li>
+        <li><a [routerLink]="[ '/dashboard/quotation/all' ] "><i class="fa fa-dashboard "></i> Quotation</a></li>
+        <li class="active ">Display</li>
+      </ol>
+    </div> 
+  </section>
+  <section class="content " *ngIf="quotation">
+    <div class="col-xs-10 pull-right" id="quotation_main">
+      <div id="quotation_body">
+        <!--quotation display starts here-->
+        <div class="" id="quotation_box" style="margin-top:10px" #quotationBox>
+          <!--head row-->
+          <div class="row ">
+            <!--left section-->
+            <div class="col-md-6">
+              <img src="/assets/dist/img/Aquality.jpg" style="width:60%; height:90px; padding:5px;" id="company_logo">
+            </div>
+            <!--right section-->
+            <div class="col-md-6" style="text-align: none; margin-top:8px; height:90px;">
+                <h4 class="title font-bold"><strong>Our Address</strong></h4>
+                
+                <p style="font-size: 18px;"><i class="fa fa-home mr-3"></i> # 8-1-284/OU/385/1&2 | 4th Floor Bait-ul-Rida | OU Colony Shaikpet, Lanco Hills Lane, Hyderabad, Telangana 500 008, India.</p>
+  
+                <p style="font-size: 18px;"><i class="fa fa-envelope mr-3"></i> <span>info@aquality.in | accounts@aquality.in</span>  <span style="margin-left:6px;"> <i class="fa fa-phone mr-3"></i> + 91 406 888 8486 | + 91 709 389 8486</span> </p>
+               <!-- <p><i class="fa fa-envelope mr-3"></i> info@aquality.in | accounts@aquality.in</p>-->
+                <p style="margin-top: -5px;"> <strong>GSTIN : 36AAMCA2366GIZM</strong></p>
+
+            </div>
+
+            
+              <div class=row style="background-color:darkslategray; margin-top:190px; width:100%; height:240px;margin-left: 0vw;">
+                <div class="col-md-4 col-xs-4" >
+                  <div class="" style="color:white; margin-left:40px;margin-top:20px; padding:10px; font-size:18px; ">
+                      <span> Quotation for: </span><br>
+                      <strong> {{ quotation.customerData?.fullname }} </strong><br>
+                      <span> {{ quotation.customerData?.location }} </span><br>
+                      <span> {{ quotation.customerData?.city }} </span><br>
+                      <span> India </span>
+                      <span> {{ quotation.customerData?.mobile_primary }} </span><br>
+                      <span> {{ quotation.customerData?.email }} </span><br>
+                      <!--<span> {{ quotation.customerData?.area }} </span><br>-->
+                      </div>
+                </div>
+                <div class="col-md-offset-2 col-md-6 col-xs-2">
+                  <div style="padding-top:40px; margin-top:10px;">
+                    <span style="color:rgb(245, 163, 10); font-size:70px;">QUOTATION</span>
+                    </div>
+                </div>
+              </div>
+              <div class="row" style="margin-left: 0vw; background-color:black;width:100%;color:#fff; height:60px; text-align: -webkit-center; font-size:18px;">
+                <div class="col-md-4 col-xs-4" style="margin-top:17px;" >
+                    <span> Date: {{ quotation.created_on | date }} </span>
+                </div>
+                <div class="col-md-4 col-xs-4" style="margin-top:17px;">
+                    <span> Valid upto: {{ quotation?.vdate | date }}</span>
+                  </div>
+                  <div class="col-md-4 col-xs-4" style="margin-top:17px;">
+                      <span> Customer ID : {{ quotation.customerData?.nid}}</span>
+                    </div>
+              </div>
+              <div class="row" style="margin-left: 0vw; background-color:black;width:100%;color:#fff; height:60px; text-align: -webkit-center; font-size:15px;">
+                  <div class="col-md-4 col-xs-4" style="margin-top:17px;" >
+                      
+                      <span> <strong>Quotation Number: </strong> {{ quotation.quotation_number}}</span>
+                  </div>
+                  <div class="col-md-4 col-xs-4" style="margin-top:17px;">
+                      <span> <strong>Mobile Number: </strong> {{ quotation.customerData?.mobile_primary }}</span>
+                    </div>
+                    <div class="col-md-4 col-xs-4" style="margin-top:17px;">
+                        <span> <strong>Prepared by: </strong> Aquality</span><br>
+                    
+                  
+                      </div>
+                      
+                </div>
+                <div class="row" style="margin-left: 0vw; background-color:black;width:100%;color:#fff; height:80px;  font-size:15px;">
+                     <p> <b style="font-size: 20px;">Quotation for : </b> {{ quotation?.remarks }}</p> 
+                </div>
+
+              <!--table-->
+              <div id="quotation_table">
+              <table class="table table-hover table-responsive" *ngIf="quotation" style="width:100%; height:200px;margin-left: 0vw;" >
+                  <thead style="background-color:rgb(245, 163, 10); color:#fff;">
+                    <tr>
+                      <th>S.No.</th>
+                      <th>ITEM DESCRIPTION</th>
+                      <th>HSN CODE</th>
+                      <th>UNIT PRICE</th>
+                      <th style="width:30%;">QUANTITY</th>
+                      <th style="padding-left:100px;">AMOUNT</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of quotation.productList2; let i=index"
+                    [ngClass]="i==quotation.productList2.length-1 ? 'row-divide' : '' ">
+                    <td>{{i + 1}}</td>
+                    <td>{{ item?.name }}</td>
+                    <td> {{ item?.hsn_code }}</td>
+                    <td> {{ item?.rate | currency:'INR' }}</td>
+                      <td style=" width:30%;">{{ item?.qty}}</td>
+                      <td style="padding-left:100px; background-color:#ffe6e6; width:20%;">{{ item?.rate * item.qty | currency:'INR' }}</td>
+                    </tr>
+                    <tr>
+                        
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="padding-left:200px;">
+                          <strong>SUB TOTAL: </strong>
+                        </td>
+                        <td style="padding-left:100px; background-color:#ffe6e6;width:20%;">
+                            {{ quotation?.subTotal | currency:'INR' }}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td style="padding-left:200px;">
+                            <strong> SGST + CGST: </strong>
+                          </td>
+                          <td style="padding-left:100px; background-color:#ffe6e6;width:20%;">
+                              {{ quotation.taxPercent}} % | {{ quotation.tax | currency:'INR'}}
+                          </td>
+                        </tr>
+
+                      <tr *ngFor="let x of quotation?.amount_partially_paid;let i = index">
+                          <td></td>
+                          <td></td>
+                          
+                        
+                          <td>
+                            <strong>Payment On : {{ x.date | date }} </strong>
+                          </td>
+                          <td>
+                            INR. {{ x.amount }}
+                          </td>
+                        </tr>
+            
+                        
+                  
+                          <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td style="padding-left:200px;">
+                                Transport
+                              </td>
+                              <td style="padding-left:100px; background-color:#ffe6e6;">
+                                 {{ quotation?.transport | currency:'INR'  }}
+                              </td>
+    
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="background-color:darkslategray; color:#fff;padding-left:200px;">
+                                  GRAND TOTAL
+                                </td>
+                                <td style="background-color:rgb(245, 163, 10); color:#fff;padding-left:100px; ">
+                                  {{ quotation?.grantTotal | currency:'INR' }}
+                                </td>
+      
+                              </tr>
+                        <!--<tr *ngIf="quotation.status == 'Paid'">
+                          <td></td>
+                          <td></td>-->
+                          <!--<td></td>-->
+                          <!--<td>
+                            <strong>Amount Paid (INR)</strong>
+                          </td>
+                          <td>
+                            <strong>INR. {{ quotation.total }}</strong>
+                          </td>-->
+                        <!--</tr>-->
+                        
+                     <!--   <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td style="background-color:darkslategray; color:#fff; padding-left:200px;">
+                            <strong>TOTAL(in words)</strong>
+                          </td>
+                          <td style="background-color:rgb(245, 163, 10); color:#fff;">
+                            <strong style="text-transform: capitalize;"> {{ finalTotalWords }} INR only</strong>
+                          </td>
+                        </tr> -->
+                    
+                  </tbody>
+                </table>
+                </div>
+                
+                        
+                      <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                    
+
+                      <h3 class="well">Bank Details</h3>
+                       <div class="table-responsive">          
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>AQUALITY Water Solutions Pvt Ltd</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          
+                          <td></td>
+                          <td>A/c No.</td>
+                          <td><strong>111 905 000 338</strong></td>
+                        </tr>
+                        <tr>
+                          
+                          <td></td>
+                          <td>Bank</td>
+                          <td><strong>ICICI Bank - Filmnagar Br.</strong></td>
+                        </tr>
+                        <tr>
+                          
+                          <td></td>
+                          <td>IFSC Code</td>
+                          <td><strong>ICIC 000 1119</strong></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                          
+                  </div>
+                  </div>
+
+                  <div class="col-md-6 col-xs-6" style="margin-top:50px;">
+                    <div style="text-align: -webkit-center; margin-top:20%; ">
+                       Name & Signature
+                    </div>
+                  </div>
+                  </div><br> <br>
+                  
+                  <p  style="float:left;" > <strong>Terms and Conditions:</strong>  {{ quotation.tnc }}</p><br><hr>
+                 <div class="container-fluid" style="background-color:none;">
+                  <div class="footer">
+                    
+                    <p style="color:black;">THANK YOU FOR YOUR BUSINESS </p><hr>
+                    <div class="footer-header">
+                       
+                      <p style="text-align: center;"> Water | Air | Energy</p>
+                    </div>
+                  </div>
+
+                 </div>
+          
+
+            <!--<div class="col-md-6" style="text-align: -webkit-left">
+
+              <div>
+                <strong>Aquality Water Solutions Pvt Ltd.</strong><br>
+                <span># 8-1-284/OU/385/1&2, 4th Floor Bait-ul-Rida</span><br>
+                <span>OU Colony Shaikpet, Lanco hills Lane</span><br>
+                <span>Hyderabad, Telangana State - 500008</span><br>
+                <span>India</span><br><br>
+
+                <span>Phone: +91 40 6888 8486</span><br>
+                <span>Mobile: 709 389 8486</span><br>
+                <span>www.aquality.in</span>
+                <span>Email: accounts@aquality.in  | info@aquality.in</span>
+                <span></span>
+              </div>
+            </div>
+      
+            
+                <div class="col-md-offset-2 col-md-4" style="text-align: -webkit-left;line-height: 2;">
+                    <span> <strong>Date: </strong> {{ quotation.created_on | date }} </span><br>
+                    <span> <strong>Quotation ref: </strong> #123456</span><br><br>
+                    
+                  
+                    <span> <strong>Valid upto: </strong> DD/MM/YYYY</span><br>
+                    <span> <strong>Prepared by: </strong> Aquality</span><br>
+                    <span> <strong>Mobile Number: </strong> {{ quotation.customerData?.mobile_primary }}</span><br>
+                  <span> <strong>Quotation Number: </strong> #001</span><br>
+                  <span> <strong>Quotation Date: </strong> {{ quotation.created_on | date }} </span><br>
+                  <span> <strong>Payment Due: </strong> {{ quotation.created_on | date }}</span> <br>
+                  <span> <strong>Amount Due (INR): </strong> INR. {{ quotation.amount_due }}</span><br>
+                </div>-->
+
+                
+              
+          </div>
+          <hr>
+
+          <!--middle row-->
+          
+          
+        </div>
+        <!--table section-->
+        
+      </div>
+      <div style="margin-top:15px">
+        <button type="button" class="btn btn-success" (click)="downloadPDF()"><i class="fa fa-download"
+                                                                                 aria-hidden="true"></i>&nbsp;Download
+          as PDF
+        </button>
+        <button type="button" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;Export
+          as CSV
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+

@@ -1,0 +1,180 @@
+<div class="content-wrapper" style="height:100vh">
+
+  <div class="alert alert-warning" *ngIf="showRemoveConfirmation && delDelivery">
+    <h4>
+      <strong>Delete Confirmation !!</strong> <br>
+      Delete the Delivery Challan for <em>{{ delDelivery.customerData?.username }} </em>  ?
+    </h4>
+    <br>
+    <button class="btn btn-success btn-sm" (click)="removeConfirmation(true)">YES</button>
+    <button class="btn btn-danger btn-sm" (click)="removeConfirmation(false)">NO</button>
+  </div>
+
+  <section class="content">
+    <div class="col-xs-12">
+      <div class="box box-primary">
+        <h2 style="margin-left:10px">Search Delivery Challanof any customer</h2>
+        <hr>
+
+        <!--search results for delivery show box-->
+        <div class="box-body table-responsive no-padding" style="margin-top:20px;margin-bottom: 20px"
+             *ngIf="deliveryList.length>0">
+          <table class="table table-hover">
+            <tbody>
+            <tr>
+              <th>Username</th>
+              <th>Fullname</th>
+              <th>Customer ID</th>
+              <th>GSTIN No.</th>
+              <th>Mobile</th>
+              <th>Area</th>
+              <th>Product</th>
+              <!--<th>Due (INR)</th>
+              <th>Paid (INR)</th>-->
+              <th>Total (INR)</th>
+              <!--<th>Status</th>-->
+              <th>Delivery Challan Generated On</th>
+              <!--<th>Last Transaction Date</th>
+              <th>Change Status</th>-->
+              <th>Action</th>
+            </tr>
+            <tr
+              *ngFor="let delivery of deliveryList">
+              <td>{{ delivery.customerData?.username }}</td>
+              <td>{{ delivery.customerData?.fullname }}</td>
+              <td>{{ delivery.customerData?.nid}}</td>
+              <td>{{ delivery.customerData?.gstno}}</td>
+              <td>{{ delivery.customerData?.mobile_primary }}</td>
+              <td>{{ delivery.customerData?.areaData?.name }}</td>
+
+              <td><span *ngIf="delivery.productList2?.length>0"> {{ delivery.productList2[0]?.name }} - <em *ngIf="delivery.productList2[0]?.rate">{{ delivery.productList2[0]?.rate }} INR/month</em> </span>
+                <small class="label bg-blue">{{ delivery.productList2.length }}</small>
+            </td>
+
+              <!--<td>
+                <small class="label bg-blue">{{ delivery.customerData?.productData?.length }}</small>
+              </td>-->
+              <!--<td>{{ delivery?.amount_due }}</td>
+              <td>{{ delivery?.total - delivery?.amount_due }}</td>-->
+              <td>{{ delivery?.grantTotal }}</td>
+              <!--<td>
+                <label class="label label-danger" *ngIf="delivery.status=='Due'"> {{ delivery.status }} </label>
+                <label class="label label-success" *ngIf="delivery.status=='Paid'"> {{ delivery.status }} </label>
+                <label class="label label-warning" *ngIf="delivery.status=='Partially Paid'"> {{ delivery.status
+                  }} </label>
+              </td>-->
+              <td>
+                {{ delivery?.created_on | date: 'yMMMd' }}
+              </td>
+              <!--<td *ngIf="delivery?.status=='Due' || delivery?.status=='Partially Paid'">
+                {{ delivery?.payment_due_date | date }}
+              </td>
+              <td *ngIf="delivery?.status=='Paid'">
+                {{ delivery?.paid_date | date }}
+              </td>
+              <td>
+                <button class="btn btn-success btn-xs" (click)="changeStatus('Paid',delivery)"> Paid</button>
+                <button type="button" class="btn btn-warning btn-xs" (click)="changeStatus('Partially Paid',delivery)"
+                        data-toggle="modal" data-target="#partiallyPaymentModal"> Partially Paid
+                </button>
+                <button class="btn btn-danger btn-xs" (click)="changeStatus('Due',delivery)"> Due</button>
+              </td>-->
+              <td>
+                <a type="button" *ngIf="delivery?.type=='recent'" class="btn btn-primary btn-xs"
+                   [routerLink]="['/dashboard/delivery/display','recent',delivery?._id]">
+                  View</a>
+                <a type="button" *ngIf="delivery?.type!='recent'" class="btn btn-primary btn-xs"
+                   [routerLink]="['/dashboard/delivery/display','all',delivery?._id]">
+                  View</a>
+
+                <button class="btn btn-xs btn-danger" (click)="remove(delivery)"><i class="fa fa-times"
+                                                                                   aria-hidden="true"></i></button>
+              </td>
+
+              <!-- Modal for Partially payment -->
+              <div class="modal fade" id="partiallyPaymentModal" tabindex="-1" role="dialog"
+                   aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                      <h2 class="modal-title" id="myModalLabel">Partially Payment</h2>
+                    </div>
+                    <div class="modal-body" *ngIf="partialDelivery">
+                      <div class="col-md-12">
+                        <div class="col-md-6">
+                          <h4 style="text-align: center">Total: {{ partialDelivery?.total }} INR</h4>
+                          <h4 style="text-align: center">Due: {{ partialDelivery?.amount_due }} INR</h4>
+                        </div>
+                        <div class="col-md-6">
+                          <div *ngFor="let x of partialDelivery?.amount_partially_paid">
+                            <h4 style="text-align: center">Date: {{ x?.date | date }} INR</h4>
+                            <h4 style="text-align: center">Partial Pay: {{ x?.amount }} INR</h4>
+                            <br>
+                          </div>
+
+                        </div>
+                      </div>
+                      <br>
+                      <form class="form-horizontal" *ngIf="partialDelivery">
+                        <!--amoount partially paid-->
+                        <div class="form-group">
+                          <label for="amount_partially_paid " class="col-sm-2 control-label ">Amount Partially Paid
+                            (INR) </label>
+                          <div class="col-sm-10">
+                            <input type="text" name="partialPay" [(ngModel)]="partialPay" class="form-control "
+                                   id="amount_partially_paid " placeholder="amount partially paid">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                      <button type="button" class="btn btn-primary" (click)="savePartialPay(partialDelivery)"
+                              data-dismiss="modal">Save changes
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tr>
+            </tbody>
+
+          </table>
+        </div>
+
+        <!--search box and functionality-->
+        <div class="container">
+          <div class="col-lg-12">
+            <form class="form-group">
+              <input style="width:100%" (keyup)="getSearchText($event)" id="search_form" type="text" class=""
+                     placeholder="Search for a customer">
+            </form>
+
+            <!--search resultsa-->
+            <div *ngIf="searchResults.length>0">
+              <strong style="font-size: 20px"> Search results: </strong> <span class="search_text"
+                                                                               style="color:blue;font-size: 20px">{{ searchText }}</span>
+              <br>
+              <ul style="list-style-type:none">
+                <li *ngFor="let customer of searchResults">
+                 <span style="font-size: 20px">
+                   <a href="javascript:void(0)" (click)="getSearchDetails(customer)">
+                   <em>{{ customer['username'] }}</em> - {{ customer['fullname']}}
+                 </a>
+                 </span>
+                  <br>
+                </li>
+                <hr>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+</div>

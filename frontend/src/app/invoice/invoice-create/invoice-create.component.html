@@ -1,0 +1,494 @@
+<div class="content-wrapper" style="height: 3000px;">
+    <section class=" content-header ">
+      <div class="col-xs-12">
+        <h1>
+          Create New Invoice
+        </h1>
+        <ol class="breadcrumb ">
+          <li><a [routerLink]="[ '/dashboard/home' ] "><i class="fa fa-dashboard "></i> Sofkul</a></li>
+          <li><a [routerLink]="[ '/dashboard/invoice/create' ] "><i class="fa fa-dashboard "></i> Invoice</a></li>
+          <li class="active ">Create</li>
+        </ol>
+      </div>
+    </section>
+    <section class="content ">
+      <div class="col-md-12">
+        <div class="box box-primary" style="height:2000px">
+          <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Invoice Created Successfully !!</div>
+          <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
+          <!--  Page Content Here -->
+          <br>
+          <!--customer list-->
+          <form class="form-horizontal ">
+            <div class="col-md-12">
+              <div class=" form-group ">
+                <label class="col-sm-2 control-label ">Choose Customer: </label>
+                <div class="col-sm-10 ">
+                  <div>
+                    <select required *ngIf="customerList" class="form-control" (change)="getCustomer($event)">
+                      <option *ngFor="let customer of customerList" value="{{ customer._id }}">
+                        <strong> {{ customer.username }} </strong> - <em> {{ customer.fullname }} </em>
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <br><br>
+          </form>
+  
+  
+          <form class="form-horizontal " style="margin-top:30px" [formGroup]="invoiceCreateForm"  novalidate (submit)="submitInvoiceCreateForm()">
+            <div class="col-md-12" *ngIf="resCustomer">
+              <!--username-->
+              <div class=" form-group ">
+                <label for="username " class="col-sm-2 control-label ">Username</label>
+                <div class="col-sm-10 ">
+                  <input formControlName="username" type="text " class="form-control " id="username "
+                         placeholder="Username " readonly>
+                </div>
+              </div>
+              <!-- customer ID -->
+              <div class=" form-group ">
+                <label for="nid " class="col-sm-2 control-label ">Customer ID</label>
+                <div class="col-sm-10 ">
+                  <input formControlName="nid" type="text " class="form-control " id="nid "
+                         placeholder="Customer ID " readonly>
+                </div>
+              </div>
+  
+              <!-- GST no -->
+              <div class=" form-group ">
+                  <label for="gstno" class="col-sm-2 control-label ">GST No.</label>
+                  <div class="col-sm-10 ">
+                    <input formControlName="gstno" type="text " class="form-control " id="gstno"
+                           placeholder="GST no." readonly>
+                  </div>
+                </div>
+              <!--email-->
+              <div class="form-group ">
+                <label for="email " class="col-sm-2 control-label ">Email</label>
+                <div class="col-sm-10 ">
+                  <input formControlName="email" type="email " class="form-control " id="email " placeholder="Email "
+                         readonly>
+                </div>
+              </div>
+              <!--fullname-->
+              <div class="form-group ">
+                <label for="fullname " class="col-sm-2 control-label ">Fullname</label>
+                <div class="col-sm-10 ">
+                  <input formControlName="fullname" type="text " class="form-control " id="fullname "
+                         placeholder="Fullname " readonly>
+                </div>
+              </div>
+  
+              <!--mobile_primary-->
+              <div class="form-group ">
+                <label for="mobile_primary " class="col-sm-2 control-label ">Mobile Primary</label>
+                <div class="col-sm-10 ">
+                  <input formControlName="mobile_primary" type="text " class="form-control " id="mobile_primary "
+                         placeholder="Mobile primary " readonly>
+                </div>
+              </div>
+  
+              <!--mobile_secondary-->
+              <div class="form-group ">
+                <label for="mobile_secondary " class="col-sm-2 control-label ">Mobile Secondary</label>
+                <div class="col-sm-10 ">
+                  <input formControlName="mobile_secondary" type="text " class="form-control " id="mobile_secondary "
+                         placeholder="Mobile secondary " readonly>
+                </div>
+              </div>
+  
+              <!--location-->
+              <div class="form-group ">
+                <label for="location " class="col-sm-2 control-label ">Billing Address</label>
+                <div class="col-sm-10">
+                  <input type="text " formControlName="location" class="form-control " id="location "
+                         placeholder="location " readonly>
+                </div>
+              </div>
+
+              <div class="form-group ">
+                <label for="ship_addr " class="col-sm-2 control-label ">Shipping Address</label>
+                <div class="col-sm-10">
+                  <input type="text " formControlName="ship_addr" class="form-control " id="ship_addr "
+                         placeholder="Shipping Address " readonly>
+                </div>
+              </div>
+  
+              <!--area-->
+              <div class="form-group ">
+                <label for="area " class="col-sm-2 control-label ">Area</label>
+                <div class="col-sm-10">
+                  <input type="text " formControlName="area" class="form-control " id="area " placeholder="area "
+                         readonly>
+                </div>
+              </div>
+  
+              <!--city-->
+              <div class="form-group ">
+                <label for="city " class="col-sm-2 control-label ">City</label>
+                <div class="col-sm-10">
+                  <input type="text " formControlName="city" class="form-control " id="city " placeholder="city " readonly>
+                </div>
+              </div>
+
+              <div class="form-group ">
+                <label for="state " class="col-sm-2 control-label ">State</label>
+                <div class="col-sm-10">
+                  <input type="text " formControlName="state" class="form-control " id="state " placeholder="state " readonly>
+                </div>
+              </div>
+
+              <div class="form-group ">
+                <label for="country " class="col-sm-2 control-label ">Country</label>
+                <div class="col-sm-10">
+                  <input type="text " formControlName="country" class="form-control " id="country " placeholder="country " readonly>
+                </div>
+              </div>
+          
+  
+             
+  
+              <div class="form-group ">
+                <label for="status" class="col-sm-2 control-label ">Status</label>
+                <div class="col-sm-10">
+                  <label class="label label-danger">Due</label>
+                </div>
+              </div>
+              <br>
+  
+              <div class="form-group">
+                <label for="remarks" class="col-sm-2 control-label" style="font-size: 30px;">Invoice</label><br>
+                <hr> 
+              <div class="col-sm-10 ">
+                  
+              </div>
+            </div>
+  
+              <div class="form-group">
+                <label for="invoice_number" class="col-sm-2 control-label">Invoice Number</label>
+                <div class="col-sm-10 ">
+                  <input formControlName="invoice_number" type="number" required class="form-control" id="invoice_number " placeholder=" Enter Invoice Number ">
+                </div>
+                
+              </div> 
+
+              <div class="form-group">
+                  <label for="po_number" class="col-sm-2 control-label">PO No.</label>
+                  <div class="col-sm-10 ">
+                    <input formControlName="po_number" type="number" required class="form-control" id="po_number " placeholder=" Enter PO Number ">
+                  </div>
+                  
+                </div> 
+  
+                <div class="form-group">
+                    <label for="po_number" class="col-sm-2 control-label">Invoice Date</label>
+    
+                    <div class="input-group date col-sm-10" style="padding-left: 15px;">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <input type="date" formControlName="date" class="form-control" id="datepicker">
+                    </div>
+                    <!-- /.input group -->
+                  </div>
+
+                  <div class="form-group">
+                      <label for="po_number" class="col-sm-2 control-label">Valid upto</label>
+      
+                      <div class="input-group date col-sm-10" style="padding-left: 15px;">
+                        <div class="input-group-addon">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="date" formControlName="vdate" class="form-control" id="datepicker">
+                      </div>
+                      <!-- /.input group -->
+                    </div>
+
+              <!--invoice_created_date-->
+              <!--<div class="form-group">
+                <label for="date" class="col-sm-2 control-label">Invoice Date</label>
+                <div class="col-sm-10">
+                  <input type="date" formControlName="date">
+                </div>
+              </div>  -->
+
+            <!--  <div class="form-group">
+                  <label for="date" class="col-sm-2 control-label">Valid Upto</label>
+                  <div class="col-sm-10">
+                    <input type="date" formControlName="vdate">
+                  </div>
+                </div>  -->
+  
+              <div class="form-group">
+                  <label for="remarks" class="col-sm-2 control-label ">Remarks</label>
+                  <div class="col-sm-10 ">
+                    <textarea formControlName="remarks" class="form-control" id="remarks " placeholder="Write remarks "></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="tnc" class="col-sm-2 control-label ">Terms & Conditions</label>
+                  <div class="col-sm-10 ">
+                    <textarea formControlName="tnc" class="form-control" id="tnc " placeholder="Terms and Conditions "></textarea>
+                  </div>
+                </div>
+
+              
+  
+                <!-- GST type -->
+              
+                
+  
+              <!--total amount-->
+             <!-- <div class="form-group ">
+                <label for="amount_due_minus_discount " class="col-sm-2 control-label ">Total (INR)</label>
+                <div class="col-sm-10">
+                  <input type="number " formControlName="total" class="form-control " id="amount_due_minus_discount "
+                         placeholder="total "
+                         readonly>
+                </div>
+              </div> -->
+               
+              <!--discount-->
+           <!--  <div class="form-group ">
+              <label for="discount " class="col-sm-2 control-label ">Discount</label>
+              <div class="col-sm-10">
+              <input type="number " (keyup)="updateDiscount($event.target.value)" formControlName="discount"
+              class="form-control " id="discount " placeholder="discount">
+              </div>
+              </div> -->
+  
+  
+              <!--product list-->
+            <!--  <div class="form-group row " *ngFor="let item of createRange(allProductCounter);">
+                <div class="col-sm-10 ">
+                  <div class="productSelectBox">
+                    <select required *ngIf="productList" class="form-control">
+                      <option *ngFor="let product of productList" value="{{ product._id }}">
+                        {{ product.name }} - <em> {{ product.rate }} </em>
+                      </option>
+                    </select>
+  
+                    
+  
+                  <button *ngIf="i>0" type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)">
+                      <i
+                        class="fa fa-times" aria-hidden="true"></i>
+                    </button> 
+                  </div>
+                </div>
+                
+              </div> -->
+              
+              <!--<div class="col-sm-4 pull-right">
+                  <div class="form-group ">
+                      <label for="quantity " class="col-sm-2 control-label ">Quantity</label>
+                      <div class="col-sm-10">
+                        <input type="number " formControlName="quantity"  class="form-control " id="quantity " 
+                               placeholder="enter quantity">
+                      </div>
+                    </div>
+                    </div>-->
+  
+  
+              
+              
+             <!-- <button (click)="addProduct()" type="button" class="pull-right btn btn-success"><i class="fa fa-plus"
+                                                                                                 aria-hidden="true"></i>
+                &nbsp; Add Product
+              </button> -->
+             <div formArrayName="invoiceItems">
+              <table  style="font-weight: bolder; text-align: center;" class="table table-hover table-responsive" style="width:100%; height:100px;" >
+                <thead   style=" margin-bottom:30px; " style="background-color:rgb(245, 163, 10); color:#fff;">
+                  <tr>
+                    <th>S.No.</th>
+                    <th>ITEM DESCRIPTION</th>
+                    <th>HSN CODE</th>
+                    <th>QUANTITY</th>
+                    <th>PRICE</th>
+                   
+                  
+                    <th style="padding-left:none;">AMOUNT</th>
+                  </tr> 
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of invoiceItems.controls; let i=index; let odd=odd;" [formGroupName]="i" [ngClass]="{odd_row: odd}" >
+                  <td>
+                    <div>
+                        <label  class="col-sm-2  btn btn-danger btn-xs control-label" (click)="removeItem(item)" style="width: 40px; margin-left:none;" ><i class="fa fa-times"
+                          aria-hidden="true"></i>&nbsp; [{{i + 1}}]
+                        </label>
+                    </div>
+                  </td>
+
+                  <td class="col-md-4">
+                    <div class="form-group row " *ngFor="let item of createRange(allProductCounter);">
+                      <div class="col-sm-10 ">
+                        <div class="productSelectBox">
+                          <select required *ngIf="productList" class="form-control" formControlName="name" > 
+                            <option *ngFor="let product of productList" value="{{ product.name }}">
+                              {{ product.name }} -- {{product.hsn_code}}
+                            </option>
+                          </select>
+                         
+        
+                          
+        
+                       <!--  <button *ngIf="i>0" type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)">
+                            <i
+                              class="fa fa-times" aria-hidden="true"></i>
+                          </button> -->
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </td>
+                    
+                 <!-- <td>
+                     <input type="text" class="form-control" placeholder="Item Description" formControlName="name">
+  
+                    </td> -->
+
+                    <td>
+
+                      <input type="number" class="form-control" placeholder="Enter HSN Code" formControlName="hsn_code">
+
+                     </td>
+
+                  <td>
+                      <input type="number" class="form-control" placeholder="Quantity" formControlName="qty">
+                    
+                  </td>
+                  <td>
+                            
+                    <input type="number" class="form-control" placeholder="Cost" formControlName="cost">
+                      
+                  </td>
+
+                
+                  <td>
+                      
+                    <input class="form-control right_placeholder"   disabled value="{{ item.value.total | currency:'INR'  }}">
+                        
+                  </td>
+  
+                  
+                  </tr>
+  
+                  <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      
+                      
+                      
+                      <td><button (click)="addItem()"  type="button" class="pull-right btn btn-success"><i class="fa fa-plus"
+                        aria-hidden="true"></i>
+                            &nbsp; Add Product
+                      </button></td>
+                    </tr>
+  
+  
+  
+                 <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    
+                    <td>Subtotal</td>
+                    <td><input class="form-control right_placeholder"  disabled value="{{ invoiceCreateForm.value.subTotal | currency:'INR'  }}"></td>
+                  </tr>
+  
+                  <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      
+                      <td>SGST + CGST </td>
+                      <td [formGroup]= "invoiceCreateForm" class="col-md-3 form-inline"> 
+                        
+                          <input style=" width: 40%;"   type="number"  formControlName="taxPercent" placeholder="% tax">
+                          <span>&nbsp; %</span>
+                          <input class="form-control right_placeholder" style="width:40%;" disabled value="{{ invoiceCreateForm.value.tax | currency:'INR'  }}">
+                      
+                       
+                          
+                        <label>
+                            </label>
+                      </td>
+                      
+                        
+                    </tr>
+
+                   <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      
+                      <td>Discount </td>
+                      <td [formGroup]= "invoiceCreateForm" class="col-md-3 form-inline"> 
+                        
+                          <input style=" width: 40%;"   type="number"  formControlName="disc" placeholder="Flat Rate">
+                          <span>&nbsp; </span>
+                          <input class="form-control right_placeholder" style="width:40%;" disabled value="{{ invoiceCreateForm.value.disc | currency:'INR'  }}">
+                      
+                       
+                          
+                        <label>
+                            </label>
+                      </td>
+                      
+                        
+                    </tr>
+  
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        
+                        <td>Grand Total</td>
+                        <td><input class="form-control right_placeholder"  disabled value="{{ invoiceCreateForm.value.grantTotal | currency:'INR'  }}"></td>
+                      </tr>
+  
+                </tbody>
+              </table>
+              
+              
+          
+            
+  
+  
+              </div>
+              <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                  <button type="submit" class="btn btn-success btn-lg">Save</button>
+                  <button type="button" class="btn btn-danger btn-lg">Cancel</button>
+  
+                </div>
+              </div>
+              
+            </div>
+            <br>
+            <br>
+            <hr>
+            <div class="col-md-12" *ngIf="isSaved">
+              <div class="alert alert-success" role="alert">Invoice Created Successfully !!</div>
+              <a class="btn btn-lg btn-info" [routerLink]="['/dashboard/invoice/display/all/',resultInvoice._id]">Generate Invoice Now</a>
+            </div>
+          </form>
+        </div>
+  
+      </div>
+    </section>
+  </div>
+  
